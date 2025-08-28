@@ -92,23 +92,23 @@ Script finished.
 
 ```bash
 # Replace YOUR_USERNAME and YOUR_REPO with your actual details
-curl -o git-cleanup.sh https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/git-cleanup.sh
-chmod +x git-cleanup.sh
+curl -o git-branch-cleaner.sh https://raw.githubusercontent.com/ryanch741/git-branch-cleaner/main/git-branch-cleaner.sh
+chmod +x git-branch-cleaner.sh
 # Optional: Make it globally accessible
-sudo mv git-cleanup.sh /usr/local/bin/git-cleanup
+sudo mv git-branch-cleaner.sh /usr/local/bin/git-branch-cleaner
 ```
 
 ### Option 2: Manual Download
-1.  Find the `git-cleanup.sh` script file in this repository.
+1.  Find the `git-branch-cleaner.sh` script file in this repository.
 2.  Click the "Raw" button and copy the entire content.
-3.  Create a new file on your local machine, paste the content, and save it as `git-cleanup.sh`.
-4.  In your terminal, grant it executable permissions: `chmod +x git-cleanup.sh`.
+3.  Create a new file on your local machine, paste the content, and save it as `git-branch-cleaner.sh`.
+4.  In your terminal, grant it executable permissions: `chmod +x git-branch-cleaner.sh`.
 
 
 ## 💡 Usage
 
 1.  **Navigate to your Git repository**: `cd /path/to/your/project`
-2.  **Run the script**: `./git-cleanup.sh` (or `git-cleanup` if installed globally).
+2.  **Run the script**: `./git-branch-cleaner.sh` (or `git-branch-cleaner` if installed globally).
 3.  **Follow the prompts**: Enter the branch prefix and target branch, then confirm deletions with `y`.
 
 ## ⚙️ Configuration
