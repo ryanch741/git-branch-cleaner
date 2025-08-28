@@ -4,7 +4,7 @@
 
 A powerful, smart, and safe batch cleanup tool for Git branches, designed to help developers say goodbye to cluttered branch lists.
 
-[中文版](./README.cn.md)
+[中文版](./README_cn.md)
 
 ---
 
