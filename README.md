@@ -1,232 +1,152 @@
-# 🚀 Git Branch Cleanup Tool
+# Git Branch Cleanup Tool
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Version-4.0-blue.svg" alt="Version">
-  <img src="https://img.shields.io/badge/Shell-Bash-green.svg" alt="Shell">
-  <img src="https://img.shields.io/badge/License-MIT-orange.svg" alt="License">
-  <img src="https://img.shields.io/badge/PRs-Welcome-brightgreen.svg" alt="PRs Welcome">
-</p>
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-<p align="center">
-  <strong>An interactive Git branch cleanup tool powered by shell script.</strong>
-  <br>
-  一款强大、安全且人性化的交互式 Git 分支清理工具。
-</p>
+A powerful, smart, and safe batch cleanup tool for Git branches, designed to help developers say goodbye to cluttered branch lists.
+
+[中文版](./README_cn.md)
 
 ---
 
-[**English**](#-english) | [**中文**](#-中文)
+Have you ever been troubled by the large number of merged `feature/`, `fix/`, or `hotfix/` branches in your project? Manually checking and deleting them one by one is both tedious and error-prone.
 
----
+**This tool is your solution!** It automates the process of finding, checking, and interactively cleaning up branches that have served their purpose, keeping your repository tidy.
 
-## 🇬🇧 English
+## Demo
 
-### ✨ Overview
+Here is a demonstration of the tool in action:
 
-In a typical Git workflow, development teams create numerous branches like `feature/`, `fix/`, or `hotfix/`. Over time, many merged branches accumulate in both local and remote repositories, leading to clutter and making it difficult to navigate.
+```bash
+# The script's UI is in Chinese, as shown below.
+=== Git 分支清理工具 ===
 
-This tool automates the cleanup process. It intelligently identifies branches that have been merged into a target branch (e.g., `develop` or `main`) and interactively guides you through a safe and efficient cleanup process, keeping your repository tidy and clean.
+本工具将帮助您清理已经合并到目标分支的本地和远程分支。
+流程如下:
+  1. 您需要提供一个分支前缀 (如: feature/)
+  2. 您需要提供一个用于比较的目标分支 (如: develop)
+  3. 脚本会自动检查、同步，并逐一询问您是否删除已合并的分支。
+------------------------------------------------------------------
 
-### 🌟 Key Features
+请输入要检查的分支前缀 (默认为: feature/): feature/
+请输入比较的目标分支名 (默认为: develop): develop
+✓ 已将输入保存为下次的默认值
 
--   **🎯 Smart Matching**: Automatically finds all local and remote branches matching a specified prefix (e.g., `feature/`).
--   **✅ Safe by Design**: Rigorously checks if each branch is fully merged into your target branch. **It will never delete unmerged branches.**
--   **🤝 Interactive Confirmation**: For every deletable branch, it clearly prompts for your confirmation, giving you full control and preventing accidental deletions.
--   **🧠 Memory Function**: Remembers the last "branch prefix" and "target branch" you used, setting them as defaults for the next run to boost your efficiency.
--   **🔄 Unified Handling**: Seamlessly processes both local and remote branches in a safe order (local first, then remote).
--   **📊 Clear Reporting**: After execution, it provides a detailed, categorized summary report (Deleted, Skipped by user, Unmerged) so you know exactly what happened.
--   **🛡️ Pre-flight Checks**: Automatically syncs with the remote, checks for uncommitted changes, and ensures the target branch is up-to-date before performing any actions.
+正在同步远程分支信息 (fetch --prune)...
+正在切换并更新目标分支 'develop'...
+develop 分支状态检查通过
 
-### 🚀 Installation
+正在查找匹配前缀 'feature/' 的所有分支...
+找到以下待检查分支:
+feature/add-login-form
+feature/fix-payment-bug
+feature/user-profile-refactor
 
-1.  **Clone or Download**:
-    Get the script `git-cleanup.sh` from this repository.
+--- 正在检查分支: feature/add-login-form ---
+✓ 已合并: 'feature/add-login-form' 的更改已包含在 'develop' 中
+  是否删除 本地和远程 分支 'feature/add-login-form'? (y/N): y
+  正在删除本地分支...
+  正在删除远程分支...
+  ✓ 已删除
 
-    ```bash
-    git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
-    cd YOUR_REPOSITORY
-    ```
+--- 正在检查分支: feature/fix-payment-bug ---
+✗ 未合并: 'feature/fix-payment-bug' 的更改尚未完全合并，已跳过
 
-2.  **Make it Executable**:
-    Give the script execution permissions.
+--- 正在检查分支: feature/user-profile-refactor ---
+✓ 已合并: 'feature/user-profile-refactor' 的更改已包含在 'develop' 中
+  是否删除 本地和远程 分支 'feature/user-profile-refactor'? (y/N): n
+  ✗ 用户选择跳过
+
+==================================================================
+执行完成 - 最终报告
+==================================================================
+  总共检查分支数: 3
+  成功删除: 1
+  用户跳过: 1
+  未 合 并: 1
+
+已删除的分支列表:
+  - feature/add-login-form (本地+远程)
+
+用户跳过的分支 (已合并但未删除):
+  - feature/user-profile-refactor
+
+未合并的分支 (需要您手动检查):
+  - feature/fix-payment-bug
+
+脚本执行完毕。
+```
+
+## ✨ Key Features
+
+*   **Smart Discovery**: Automatically scans and lists all local and remote branches that match a specified prefix (e.g., `feature/`).
+*   **Accurate Merge Checking**: Uses `git merge-base --is-ancestor` for its core logic, ensuring that only branches **fully merged** into the target are marked for deletion. This avoids potential misjudgments from `git branch --merged` in complex histories.
+*   **Interactive & Safe Deletion**: Prompts for confirmation for each merged branch, giving you the final say and preventing accidental deletion of important branches.
+*   **Unified Local & Remote Handling**: No need to differentiate between local and remote. The tool auto-detects the existence of each and uses a safe deletion order (local first, then remote).
+*   **Input Persistence**: Remembers the last branch prefix and target branch you used. Next time, just press Enter to reuse them, significantly improving efficiency.
+*   **Pre-run Safety Checks**: Before performing any actions, the script verifies:
+    *   If the current directory is a Git repository.
+    *   If the target branch has uncommitted or unpushed changes, preventing operations on an inconsistent state.
+*   **Clear Summary Report**: After execution, it provides a detailed, categorized report showing which branches were deleted, skipped by the user, or kept because they were unmerged.
+*   **Color-coded Output**: Uses different colors to distinguish between states (success, warning, error), making the output easy to read at a glance.
+
+## 🚀 Installation
+
+You can install the script using any of the following methods.
+
+### Option 1: Using curl (Recommended)
+
+Open your terminal and run the following command to download the script and make it executable.
+
+```bash
+# Replace YOUR_USERNAME and YOUR_REPO with your actual details
+curl -o git-cleanup.sh https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/git-cleanup.sh
+chmod +x git-cleanup.sh
+```
+> **Tip**: To use the script from anywhere, move it to a directory included in your system's `$PATH`, such as `/usr/local/bin`.
+> ```bash
+> # Optional: Make it globally accessible
+> sudo mv git-cleanup.sh /usr/local/bin/git-cleanup
+> ```
+
+### Option 2: Manual Download
+
+1.  Find the script file `git-cleanup.sh` in this repository.
+2.  Click the "Raw" button, then copy the entire content (Ctrl+A, Ctrl+C).
+3.  Create a new file on your local machine, paste the content, and save it as `git-cleanup.sh`.
+4.  In your terminal, grant it executable permissions:
     ```bash
     chmod +x git-cleanup.sh
     ```
 
-3.  **(Recommended) Add to Your PATH**:
-    For easy access from any repository on your system, move it to a directory in your system's PATH.
+## 💡 Usage
+
+1.  **Navigate to your Git repository**:
     ```bash
-    sudo mv git-cleanup.sh /usr/local/bin/git-cleanup
+    cd /path/to/your/project
     ```
-    Now, you can simply run `git-cleanup` anywhere.
+2.  **Run the script**:
+    *   If it's in the current directory: `./git-cleanup.sh`
+    *   If installed globally: `git-cleanup`
+3.  **Follow the prompts**:
+    *   **Enter the branch prefix**: e.g., `feature/`, `fix/`, or `hotfix-`.
+    *   **Enter the target branch**: e.g., `develop`, `main`, or `master`. This is the base branch for checking if others are merged.
+    *   For each merged branch, type `y` or `Y` to confirm deletion, or simply press Enter to skip.
 
-### 💡 How to Use
+## ⚙️ Configuration
 
-1.  Navigate to your Git project directory in the terminal.
-2.  Run the script:
-    ```bash
-    # If in the current directory
-    ./git-cleanup.sh
+*   **Memory File**: The script creates a file at `~/.git_cleanup_script.conf` in your home directory to store your last inputs. You can edit or delete this file at any time.
+*   **Remote Name**: The script defaults to using `origin` as the remote name. If your remote is named something else, you can change the `REMOTE_NAME` variable at the top of the script.
 
-    # If installed in your PATH
-    git-cleanup
-    ```
-3.  Follow the interactive prompts:
-    *   **Enter the branch prefix to check**: e.g., `feature/` or `fix/`.
-    *   **Enter the target branch name for comparison**: e.g., `develop` or `main`.
-4.  The script will then check each branch and ask for confirmation before deleting any that are merged. Simply type `y` to delete or press `Enter` to skip.
+## 🤝 Contributing
 
-### 🤖 AI Integration (with Gemini CLI)
+Contributions are welcome! Please feel free to submit a pull request or create an issue to improve this tool.
 
-You can also trigger this script using AI like Google's Gemini CLI.
+1.  Fork the Project
+2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4.  Push to the Branch (`git push origin feature/AmazingFeature`)
+5.  Open a Pull Request
 
-1.  **Create `tool_config.json`**:
-    In your project directory, create a `tool_config.json` file with the following content:
-    ```json
-    {
-      "tool_config": {
-        "function_declarations": [
-          {
-            "name": "start_interactive_git_cleanup",
-            "description": "Starts a local, interactive script to clean up Git branches. The script will guide the user through all subsequent steps.",
-            "parameters": {"type": "OBJECT", "properties": {}, "required": []}
-          }
-        ]
-      },
-      "tool_execution_config": {
-        "local_tool_execution": {
-          "command_specifications": [
-            {
-              "function_name": "start_interactive_git_cleanup",
-              "command": ["./git-cleanup.sh"]
-            }
-          ]
-        }
-      }
-    }
-    ```
+## 📄 License
 
-2.  **Run with Gemini CLI**:
-    Start the chat session by pointing to your tool configuration file.
-    ```bash
-    gemini chat --tool_config_file=tool_config.json
-    ```
-
-3.  **Interact with AI**:
-    Now, you can ask Gemini to run the tool for you.
-    ```
-    You: Help me clean up my git branches.
-
-    (Gemini will execute the script, and you can continue the process in your terminal.)
-    ```
-
----
-
-## 🇨🇳 中文
-
-### ✨ 概述
-
-在日常的 Git 工作流中，团队会创建大量的 `feature/`, `fix/` 或 `hotfix/` 分支。随着时间推移，许多已经合并的分支会堆积在本地和远程仓库中，造成信息冗余，干扰开发视线。
-
-本工具旨在自动化地解决这一问题。它能够智能地识别已合并的分支，并通过交互式的方式，安全、高效地帮助您清理这些不再需要的分支，让您的仓库保持整洁。
-
-### 🌟 核心功能
-
--   **🎯 智能匹配**: 自动查找所有匹配指定前缀（如 `feature/`）的本地和远程分支。
--   **✅ 安全第一**: 严格校验每个分支是否已完全合并到您指定的目标分支。**绝不删除未合并的分支**。
--   **🤝 交互式确认**: 对每一个可删除的分支，都会清晰地询问您是否执行删除操作，给予您完全的控制权，防止误删。
--   **🧠 记忆功能**: 自动记住您上次使用的“分支前缀”和“目标分支”，下次运行时直接作为默认值，大幅提升效率。
--   **🔄 统一处理**: 无缝处理本地与远程分支，并采用先删本地、后删远程的安全顺序。
--   **📊 清晰报告**: 脚本执行完毕后，提供一份详细的分类统计报告（已删除、用户跳过、未合并），让您对清理结果一目了然。
--   **🛡️ 环境预检**: 在执行核心逻辑前，会自动同步远程数据、检查工作区状态，并确保目标分支处于最新状态，避免在错误的环境下执行操作。
-
-### 🚀 安装指南
-
-1.  **克隆或下载**:
-    从本仓库获取 `git-cleanup.sh` 脚本。
-    ```bash
-    git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
-    cd YOUR_REPOSITORY
-    ```
-
-2.  **添加执行权限**:
-    ```bash
-    chmod +x git-cleanup.sh
-    ```
-
-3.  **(推荐) 加入系统路径**:
-    为了方便在任何项目中使用，可以将其移动到您的系统路径下。
-    ```bash
-    sudo mv git-cleanup.sh /usr/local/bin/git-cleanup
-    ```
-    之后，您就可以在任何 Git 仓库中直接通过 `git-cleanup` 命令来运行它。
-
-### 💡 如何使用
-
-1.  在终端中，进入您需要清理的 Git 项目目录。
-2.  运行脚本：
-    ```bash
-    # 如果脚本在当前目录
-    ./git-cleanup.sh
-
-    # 如果已安装到系统路径
-    git-cleanup
-    ```
-3.  根据交互式提示，依次输入信息：
-    *   **分支前缀**: 您想要清理的分支的共同前缀，例如 `feature/`。
-    *   **目标分支**: 用来判断其他分支是否已合并的基准分支，例如 `develop`。
-4.  脚本会开始检查，并对每个已合并的分支逐一询问您是否删除。输入 `y` 删除，或按回车键跳过。
-
-### 🤖 AI 集成 (使用 Gemini CLI)
-
-您也可以通过像 Google Gemini CLI 这样的 AI 工具来触发此脚本。
-
-1.  **创建 `tool_config.json` 文件**:
-    在您的项目目录中，创建 `tool_config.json` 文件并填入以下内容：
-    ```json
-    {
-      "tool_config": {
-        "function_declarations": [
-          {
-            "name": "start_interactive_git_cleanup",
-            "description": "启动一个本地的、交互式的脚本来清理 Git 分支。该脚本将引导用户完成所有后续步骤。",
-            "parameters": {"type": "OBJECT", "properties": {}, "required": []}
-          }
-        ]
-      },
-      "tool_execution_config": {
-        "local_tool_execution": {
-          "command_specifications": [
-            {
-              "function_name": "start_interactive_git_cleanup",
-              "command": ["./git-cleanup.sh"]
-            }
-          ]
-        }
-      }
-    }
-    ```
-
-2.  **运行 Gemini CLI**:
-    通过指定工具配置文件来启动聊天会话。
-    ```bash
-    gemini chat --tool_config_file=tool_config.json
-    ```
-
-3.  **与 AI 交互**:
-    现在，您可以让 AI 帮您运行这个工具了。
-    ```
-    你: 帮我清理一下 git 分支
-
-    (Gemini 将会执行脚本，之后您可以在终端中继续交互式操作。)
-    ```
-
----
-
-### 📜 License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
-### 🙌 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
+This project is licensed under the [MIT License](LICENSE).
