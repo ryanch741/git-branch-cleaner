@@ -88,7 +88,7 @@ sudo mv git-cleanup.sh /usr/local/bin/git-cleanup
 
   | 微信支付 (WeChat Pay) | 支付宝 (Alipay) |
   | :---: | :---: |
-  | <img src="https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/docs/wechat_donate.png" alt="微信赞赏码" width="200"> | <img src="https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/docs/alipay_donate.png" alt="支付宝赞赏码" width="200"> |
+  | <img src="https://raw.githubusercontent.com/ryanch741/git-branch-cleaner/main/wx_pay_qr.jpg" alt="微信赞赏码" width="200"> | <img src="https://raw.githubusercontent.com/ryanch741/git-branch-cleaner/main/ali_pay_qr.jpg" alt="支付宝赞赏码" width="200"> |
 
 
 ## 📄 许可证 (License)
