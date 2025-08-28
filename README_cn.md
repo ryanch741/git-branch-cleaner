@@ -4,7 +4,7 @@
 
 一个强大、智能且安全的 Git 分支批量清理工具，旨在帮助开发者告别杂乱无章的分支列表。
 
-[English Version](./README.en.md)
+[English Version](./README.md)
 
 ---
 
