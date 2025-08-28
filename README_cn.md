@@ -47,6 +47,9 @@
 ```bash
 curl -o git-branch-cleaner.cn.sh https://raw.githubusercontent.com/ryanch741/git-branch-cleaner/main/git-branch-cleaner.cn.sh
 chmod +x git-branch-cleaner.cn.sh
+
+# 可选：全局安装
+sudo mv git-branch-cleaner.cn.sh /usr/local/bin/git-branch-cleaner
 ```
 
 ### 方式二: 手动下载
