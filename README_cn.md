@@ -45,24 +45,21 @@
 ### 方式一: 使用 curl (推荐)
 
 ```bash
-# 替换 YOUR_USERNAME 和 YOUR_REPO
-curl -o git-cleanup.sh https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/git-cleanup.sh
-chmod +x git-cleanup.sh
-# 可选步骤：全局安装
-sudo mv git-cleanup.sh /usr/local/bin/git-cleanup
+curl -o git-branch-cleaner.cn.sh https://raw.githubusercontent.com/ryanch741/git-branch-cleaner/main/git-branch-cleaner.cn.sh
+chmod +x git-branch-cleaner.cn.sh
 ```
 
 ### 方式二: 手动下载
-1.  在本仓库中找到脚本文件 `git-cleanup.sh`。
+1.  在本仓库中找到脚本文件 `git-branch-cleaner.cn.sh`。
 2.  点击 "Raw" 按钮，复制全部内容。
-3.  在本地创建 `git-cleanup.sh` 文件并粘贴内容。
-4.  添加可执行权限: `chmod +x git-cleanup.sh`。
+3.  在本地创建 `git-branch-cleaner.cn.sh` 文件并粘贴内容。
+4.  添加可执行权限: `chmod +x git-branch-cleaner.cn.sh`。
 
 
 ## 💡 使用方法 (Usage)
 
 1.  **进入你的 Git 仓库目录**: `cd /path/to/your/project`
-2.  **运行脚本**: `./git-cleanup.sh` (或全局安装后的 `git-cleanup`)
+2.  **运行脚本**: `git-branch-cleaner.cn.sh` (或全局安装后的 `git-branch-cleaner`)
 3.  **按照提示操作**。
 
 ## ⚙️ 配置 (Configuration)
